@@ -1,0 +1,22 @@
+from collections import deque
+from collections import Optional
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def isCompleteTree(self, root: TreeNode) -> bool:
+        # Check if the root node is None, if so, return True (an empty tree is complete)
+        if not root:
+            return True
+        q = deque([root])
+        while q[0] is not None:
+            node = q.popleft()
+            q.append(node.left)
+            q.append(node.right)
+        while q and q[0] is None:
+            q.popleft()
+        return not bool(q)
