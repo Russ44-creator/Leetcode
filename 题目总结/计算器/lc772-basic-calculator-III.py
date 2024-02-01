@@ -17,11 +17,10 @@ class Solution:
                 num_brackets = 1
                 for i in range(i_start,len(s)):
                     if s[i] == '(':
-                        num_brackets += 1
+                        num_brackets+=1
                     elif s[i]==')':
-                        num_brackets -= 1
-                    if num_brackets == 0:
-                        break
+                        num_brackets-=1
+                    if num_brackets==0: break
                 num = self.calculate(s[i_start:i])
                
             else:

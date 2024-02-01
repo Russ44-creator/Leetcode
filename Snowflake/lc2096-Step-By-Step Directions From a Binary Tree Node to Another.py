@@ -16,15 +16,17 @@ class Solution:
                 return False
             if node.val == val:
                 return True
-            path.append((node.val, "L"))
+            path.append((node.val,"L"))
             if find(node.left, val):
                 return True
             path.pop()
-            path.append((node.val, "R"))
-            if not find(node.right, val):
-                path.pop()
-                return False
-            return True
+            path.append((node.val,"R"))
+            if find(node.right, val):
+                return True
+            path.pop()
+            return False
+            
+        
         find(root, startValue)
         path_s = list(path)
         path = []
@@ -32,12 +34,4 @@ class Solution:
         i = 0
         while i < len(path_s) and i < len(path) and path_s[i] == path[i]:
             i += 1
-        print(path_s, path)
-        ans = ""
-        ans += "U" * (len(path_s) - i)
-        
-        if path:
-            while i < len(path):
-                ans += path[i][1]
-                i += 1
-        return ans
+        return "U" * (len(path_s) - i) + "".join(list(zip(*path))[1][i:]) if path else "U" * len(path_s)

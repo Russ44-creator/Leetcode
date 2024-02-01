@@ -4,11 +4,13 @@ from collections import defaultdict
 class UnionFind:
     def __init__(self):
         self.parent = {}
+
     def find(self, A):
         root = A
         while root != self.parent[root]:
             root = self.parent[root]
         return root
+    
     def union(self, A, B):
         root_a = self.find(A)
         root_b = self.find(B)

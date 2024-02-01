@@ -21,13 +21,10 @@ for i in range(len(input)):
     string = ""
     for j in range(26):
         string += str(prefix_sum[j][i])
-    print(string)
     if string in map:
         if ans < i - (map[string] + 1):
             ans = i - map[string]
             start, end = map[string] + 1, i
-            print(start, end)
-            
     else:
         map[string] = i
 print (input[start:end+1])

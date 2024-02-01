@@ -16,9 +16,7 @@ class Solution:
                 if possibleWord in hashMap.values():
                     continue
                 hashMap[curpattern] = possibleWord
-                if dfs(pattern, pIndex + 1, s, sIndex + len(possibleWord), hashMap):
-                    return True
-                # res = res or dfs(pattern, pIndex + 1, s, sIndex + len(possibleWord), hashMap)
+                res = res or dfs(pattern, pIndex + 1, s, sIndex + len(possibleWord), hashMap)
                 del hashMap[curpattern]
-            return False
+            return res
         return dfs(pattern, 0, s, 0, hashMap)
