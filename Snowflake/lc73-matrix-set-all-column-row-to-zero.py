@@ -39,6 +39,7 @@ class Solution:
         if row0_flag:
             for j in range(col):
                 matrix[0][j] = 0
+                
         if col0_flag:
             for i in range(row):
                 matrix[i][0] = 0

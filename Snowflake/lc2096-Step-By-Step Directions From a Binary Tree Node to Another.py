@@ -28,7 +28,7 @@ class Solution:
             
         
         find(root, startValue)
-        path_s = list(path)
+        path_s = path
         path = []
         find(root, destValue)
         i = 0
