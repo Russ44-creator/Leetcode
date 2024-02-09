@@ -7,9 +7,10 @@ Ex: ("a", 1), ("b", 2), ("c", 1)
 2. Given a key, return the value
 3. Given a value, return a String[] of keys
 4. Return the key with the smallest value (can be any key，
-比如例子里最小的为1，return a/c都行），delete the corresponding key, value pair
+   比如例子里最小的为1，return a/c都行），delete the corresponding key, value pair
 '''
 
 hashmap = {}
-valueList = {} 
+valueList = {} # maintain a list
 # or a heap
+heap = [] # maintain the value, delete the key, value pair

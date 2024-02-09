@@ -15,4 +15,4 @@ class Solution:
                     left = mid + 1
                 else:
                     right = mid - 1
-        return -1
+        return left if nums[left] == target else -1

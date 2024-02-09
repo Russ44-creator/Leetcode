@@ -20,6 +20,7 @@ def quicksort(nums, k, lo, hi):
             i += 1
         nums[j] = nums[i]
     nums[i] = pivot
+    print(i)
     if i > k:
         return quicksort(nums, k, lo, i - 1)
     if i < k:
