@@ -5,7 +5,7 @@ class Solution:
     def __init__(self):
         self.buf = []
 
-    def read(self, buf: List[str], n: int) -> int:
+    def read(self, buf, n: int) -> int:
         buf_len = len(self.buf)
         # 检查上一次多余的字符够不够
         if len(self.buf) >= n:
