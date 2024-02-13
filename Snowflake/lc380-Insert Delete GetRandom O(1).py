@@ -5,7 +5,7 @@ class RandomizedSet:
     def __init__(self):
         self.nums = []
         self.indices = {}
-
+    # nums存所有的value， indices存value到index
     def insert(self, val: int) -> bool:
         if val in self.indices:
             return False

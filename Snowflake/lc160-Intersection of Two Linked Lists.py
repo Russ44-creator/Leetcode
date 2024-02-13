@@ -4,6 +4,7 @@ class ListNode:
         self.val = x
         self.next = None
 
+# 环形链表
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode):
         one = headA

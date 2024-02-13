@@ -3,7 +3,7 @@
 保证数组里只有一个没有配对的，而且凡是配对的数字都是相邻的，说了一个无脑暴力解，问有没有更快的，
 然后我说了一个二分法的解法
 '''
-nums = [4, 4, 1, 5, 5]
+nums = [4, 4, 5, 5, 1]
 def find_single(nums):
     left, right = 0, len(nums) - 1
     while left < right:
@@ -14,12 +14,12 @@ def find_single(nums):
                 left = mid + 1
             else:
                 right = mid - 1
-        # if left is even
+        # if left is not even
         else:
             if nums[mid] == nums[mid - 1]:
-                right = mid
+                right = mid - 1
             else:
                 left = mid
-    return nums[left]
+    return nums[right]
 
 print(find_single(nums))

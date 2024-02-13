@@ -1,5 +1,6 @@
 class Solution:
     def firstMissingPositive(self, nums) -> int:
+        # 交换element
         size = len(nums)
         for i in range(size):
             while 1 <= nums[i] <= size and nums[i] != nums[nums[i] - 1]:

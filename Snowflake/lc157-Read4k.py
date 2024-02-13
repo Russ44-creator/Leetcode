@@ -12,5 +12,4 @@ class Solution:
             for j in range(cur_len):
                 buf[bi] = tmp[j]
                 bi += 1
-            print(cur_len)
         return min(bi, n)

@@ -1,5 +1,6 @@
 class Solution:
     def minCost(self, nums, cost) -> int:
+        # 排序，查分，前缀和
         a = sorted(zip(nums, cost))
         ans = total = sum((x - a[0][0]) * c for x, c in a)
         sum_cost = sum(cost)

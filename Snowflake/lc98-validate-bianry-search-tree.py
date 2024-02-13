@@ -4,7 +4,7 @@ class TreeNode:
         self.val = val
         self.left = left
         self.right = right
-        
+# 递归求解bst树
 class Solution:
     def isValidBST(self, root) -> bool:
         def bst(root, min_val = float('-inf'), max_val = float('inf')):

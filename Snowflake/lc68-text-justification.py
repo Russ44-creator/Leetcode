@@ -1,5 +1,6 @@
 class Solution:
     def fullJustify(self, words, maxWidth: int):
+        # 一个list存当前所有word，一个变量存当前word有多少位
         result = []
         cur = []
         num_of_letters = 0

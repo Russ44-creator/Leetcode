@@ -10,6 +10,7 @@ class Solution:
         if not root:
             return None
         cur = root
+        # 逐层遍历
         while cur:
             dummyHead = Node()
             tail = dummyHead

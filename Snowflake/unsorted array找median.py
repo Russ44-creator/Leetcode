@@ -6,6 +6,7 @@
 
 def find_median(nums):
     k = (len(nums) - 1) // 2
+    print(k)
     return quicksort(nums, k, 0, len(nums) - 1)
 
 def quicksort(nums, k, lo, hi):
@@ -26,6 +27,6 @@ def quicksort(nums, k, lo, hi):
         return quicksort(nums, k, i + 1, hi)
     return nums[i]
 
-nums = [5, 1, 6, 7, 4, 3, 8, 9]
+nums = [5, 1, 6, 7, 4, 3, 8, 9,10]
 print(find_median(nums))
 

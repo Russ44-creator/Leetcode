@@ -30,7 +30,7 @@ class Solution(object):
         if len(word) == 0:
             return True
         
-        for direct in self.directs:
+        for direct in directs:
             cur_i = i + direct[0]
             cur_j = j + direct[1]
             

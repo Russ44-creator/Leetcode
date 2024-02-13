@@ -7,7 +7,6 @@ class TreeNode:
         self.left = left
         self.right = right
 
-# 从底层打印二叉树的节点
 class Solution:
     def findLeaves(self, root):
         def dfs(root):

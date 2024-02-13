@@ -1,5 +1,5 @@
 import collections
-# 从目标开始BFS
+# 从目标开始BFS 
 class Solution:
     def wallsAndGates(self, rooms) -> None:
         INF = 2147483647

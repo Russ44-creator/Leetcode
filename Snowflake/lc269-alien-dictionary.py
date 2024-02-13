@@ -1,4 +1,5 @@
 from collections import defaultdict
+import collections
 
 class Solution:
     def alienOrder(self, words) -> str:
