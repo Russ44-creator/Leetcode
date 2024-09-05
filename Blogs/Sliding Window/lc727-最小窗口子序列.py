@@ -10,6 +10,7 @@ class Solution:
         # 遍历T中所有的字符，不断找到T中所有字符在S中出现的所有位置。
         for j in range(1, len(T)):
             # last 用来标记T上一个字符最后出现的位置。
+
             last = -1
             # new 用来标记上一个字符T[j - 1]在S中出现的所有位置。
             new = [-1] * len(S)
