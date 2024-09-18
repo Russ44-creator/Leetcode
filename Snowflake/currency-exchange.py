@@ -44,6 +44,7 @@ def find_rate_converion(source: str, target: str) -> int:
     graph = create_graph(curr)
     return dfs(source, target, set())        
 
-curr = [("GBP", "JPY", 1.5),  ("USD", "CNY", 0.5), ("USD", "AUD", 0.5), ("JPY", "AUD", 0.1), ("JPY", "RPY", 20), ("RPY", "RUS", 11),  ("RPY", "NER", 11), ("RUS", "TED", 1),  ("RUS", "ROM", 2), ("RUS", "PINK", 2), ("RUS", "YELLOW", 2)]
+curr = [ ("GBP", "JPY", 1.5),  ("USD", "CNY", 0.5), ("USD", "AUD", 0.5), ("JPY", "AUD", 0.1), ("JPY", "RPY", 20), ("RPY", "RUS", 11),  ("RPY", "NER", 11), ("RUS", "TED", 1),  ("RUS", "ROM", 2), ("RUS", "PINK", 2), ("RUS", "YELLOW", 2),("RPY", "ABC", 3000), ("ABC", "BCD", 3000), ("BCD", "ROM", 3000)]
 # USD -> AUD -> JPY -> RPY -> RUS ->  ROM
+# USD -> AUD -> JPY -> RPY -> ABC -> BCD ->  ROM
 print("rate",find_rate_converion("USD", "ROM"))   

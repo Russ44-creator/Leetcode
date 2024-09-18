@@ -1,7 +1,7 @@
 # https://www.1point3acres.com/bbs/thread-947030-1-1.html
 '''
-第二题汇率转换，给一个list of triplets (currency_1, currency_2, 
-exchange_rate), 一个currency_a，一个currency_b，一个amount，求换算出来的cure‍‌‍‍‍‌‌‍‌‌‍‌‍‍‌‍‌‍‍‍ncy_b的数量
+第二题汇率转换, 给一个list of triplets (currency_1, currency_2, 
+exchange_rate), 一个currency_a, 一个currency_b，一个amount，求换算出来的cure‍‌‍‍‍‌‌‍‌‌‍‌‍‍‌‍‌‍‍‍ncy_b的数量
 问了不少followup，比如第二题有没有O(1)解（建个dict），这个dict怎么存，怎么improve之类的
 
 '''
