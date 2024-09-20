@@ -1,97 +1,15 @@
-# https://www.1point3acres.com/bbs/thread-1072844-1-1.html
-input = "US:UK:UPS:4,US:UK:DHL:5,UK:CA:FedEx:10,AU:JP:DHL:20"
 '''
-第一问，和汇率题一样
-写一个方法, 输入是 (成本定义字符串, sourceCountry, targetCountry, method), 输出cost
-不难, 犹豫了一下是马上就用nested map还是用string拼接, 最后用了拼接+单层map秒了, 但是感觉选错了。。
-考官还问了一些edge case的处理, 比如如果国家没找到返回什么,定义是空字符串你的代码可以处理么之类的
+String: "AUD:USD:0.7,AUD:JPY:100,USD:CAD:1.2"
+Part 1  
+给定conversion rates input，写一个可以通过fromCurrency和toCurrency调出‘直接’汇率的函数，暂时不需要考虑多次转换，不过为了提高印象分可以跟面试官确认
+需要先parse给定的input之后存储数据。我用的是一个简单的hashmap，key是“fromCurrency/toCurrency”，
+Part 2
+允许通过一次转换获得想要的货币，例子（AUD->USD->CAD)
+这个可以不用写那么麻烦，我是直接hard code了一个intermediate step，好处是写起来很快并且不容易出问题，你也可以直接按照bfs的思路来做，但是如果失误的话会影响part 3，所以我建议到part 4再考虑bfs，反正bfs写起来也挺快的
+Part 3
+当计算汇率是计算最佳汇率，就比如你可以通过AUD->GBP->CAD 和 AUD->USD->CAD两种方法获得CAD，那你就要找最好的汇率
+因为挺简单的不知道该‍‌‍‍‍‌‌‍‌‌‍‌‍‍‌‍‌‍‍‍跟面试官说啥，然后又想提升一下印象分，我就算变讨论了下什么是最好汇率，min还是max，然后瞎bb了一点
+Part 4
+允许不止一次转换，就是bfs直到找到target currency或者发现没有path，用dfs应该也可以
+总的来说挺简单的，写快一点不用在performance上过多纠结，能做出来更多的part比较重要，然后我的面试官比较passive，每次问问题都会问我怎么想然后按我想的来，建议就是多想想能怎么bb提升印象分
 '''
-
-'''
-第二问，也和汇率题一样
-如果最多允许有一个中间的 country,输出一个结构。比如输入的US, CA, 你需要输出这么个玩意
-{
-    route: "US -> UK -> CA",
-    method: "UPS -> FedEx",
-    cost: 14
-}
-题里没用明确说到底是个string还是json obj还是个什么, 我没有和考官确认, 疏忽了, 按照obj写的。
-这点还是要和考官确认下为好。
-不需要计算最低‍‌‍‍‍‌‌‍‌‌‍‌‍‍‌‍‌‍‍‍成本, 任何中间country和method都行, cost是两个method的cost之和。
-看到这个有点懵了, 我用了三层map做的, 多层嵌套给自己整成SB了。写了一段巨丑无比的n层的if/for。不过最后竟然一次跑通, 感觉出现了奇迹。。
-做完第二问就没时间了, 没说有没有第三问。我觉得如果有也是和汇率题一样, 要么求最低成本的路径, 要么允许多个中间country写DFS解。
-'''
-
-def backtrack(currentNode, endNode, graph, temp, visited, results):
-    if currentNode == endNode:
-        results.add(temp)
-        return
-    neighbors = graph.get(currentNode)
-    if neighbors:
-        for neighNode, conversionRate in neighbors.items():
-            if neighNode not in visited:
-                visited.add(neighNode)
-                backtrack(neighNode, endNode, graph, temp * conversionRate, visited, results)
-                visited.remove(neighNode)
-
-def build_graph(currencies_list):
-    graph = {}
-    for currency in currencies_list:
-        splitCurr = currency.split(',')
-        from_currency = splitCurr[0]
-        to_currency = splitCurr[1]
-        value = float(splitCurr[2])
-        
-        if from_currency not in graph:
-            graph[from_currency] = {}
-        graph[from_currency][to_currency] = value
-    return graph
-
-def find_max_conversion_rate(currencies_input, currencyFrom, currencyTo):
-    currencies = currencies_input.split(';')
-    graph = build_graph(currencies)
-    visited = set()
-    results = set()
-    backtrack(currencyFrom, currencyTo, graph, 1.0, visited, results)
-    if results:
-        return max(results)
-    else:
-        return -1.0
-
-currencies_input = 'USD,CAD,1.3;USD,GBP,0.71;USD,JPY,109;GBP,JPY,155'
-currencyFrom = 'USD'
-currencyTo = 'JPY'
-maxRate = find_max_conversion_rate(currencies_input, currencyFrom, currencyTo)
-print(maxRate)  # 输出: 110.05
-
-
-import heapq, math
-def max_conversion_rate(rates, query):
-    # Build the graph with negative log weights
-    graph = {}
-    for from_currency, to_currency, rate in rates:
-        if from_currency not in graph:
-            graph[from_currency] = []
-        graph[from_currency].append((to_currency, -math.log(rate)))
-    
-    source, target = query
-    if source not in graph:
-        return -1.0  # Source currency not in graph
-
-    # Dijkstra's algorithm initialization
-    heap = [(0, source)]  # (accumulated_weight, currency)
-    visited = {}
-    
-    while heap:
-        accumulated_weight, currency = heapq.heappop(heap)
-        if currency == target:
-            # Exponentiate the negative accumulated weight to get the rate
-            return math.exp(-accumulated_weight)
-        if currency in visited:
-            continue
-        visited[currency] = accumulated_weight
-        for neighbor, weight in graph.get(currency, []):
-            if neighbor not in visited:
-                heapq.heappush(heap, (accumulated_weight + weight, neighbor))
-    
-    return -1.0  # Target currency not reachable
