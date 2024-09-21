@@ -109,13 +109,13 @@ features = [
     { "id": "enhanced_comments", "abTest": True },
     { "id": "canada_promotion", "locations": ["CA"] }
 ]
-def get_user_features(users, features):
+def get_user_features_with_optin_optout(users, features):
     res = {}
     for user in users:
         abtest_ans, location_ans = [], []
         for feature in features:
             if "abTest" in feature and feature["abTest"]:
-                if user["id"] % 2 == 0:
+                if user["id"] % 2 == 0 or ("optIn" in user and feature["id"] in user["optIn"]):
                     abtest_ans.append(feature["id"])
             else:
                 abtest_ans.append(feature["id"])
@@ -125,9 +125,14 @@ def get_user_features(users, features):
             else:
                 location_ans.append(feature["id"])
         res[user["name"]] = list(set(abtest_ans) & set(location_ans))
+        if "optOut" in user:
+            for feature in user["optOut"]:
+                if feature in res[user["name"]]:
+                    res[user["name"]].remove(feature)
     return res
 
-print(get_user_features(users, features))
+print(get_user_features_with_optin_optout(users, features))
+
 """
 ## Part 3
 Sometimes, Features have conflicts with each other. To prevent a broken experience for users, we need
@@ -177,3 +182,89 @@ Given these additional features, the following results are now expected:
 | rahool | app_redesign                 |
 | amanda | lunar_sale, canada_promotion |
 """
+
+users = [
+    { "id": 0, "name": "eva", "location": "US", "optIn": ["annual_sale"] },
+    { "id": 1, "name": "tess", "location": "US", "optIn": ["annual_sale"] },
+    { "id": 2, "name": "rahool", "location": "CA", "optOut": ["enhanced_comments", "canada_promotion"] },
+    { "id": 3, "name": "amanda", "location": "CA", "optIn": ["annual_sale"] }
+]
+
+features = [
+    { "id": "annual_sale", "locations": ["US"], "abTest": True },
+    { "id": "enhanced_comments", "abTest": True },
+    { "id": "canada_promotion", "locations": ["CA"] },
+    { "id": "lunar_sale", "incompatible": ["annual_sale"], "priority": 10 },
+    { "id": "app_redesign", "incompatible": ["lunar_sale", "enhanced_comments"], "priority": 15, "abTest": True }
+]
+
+def get_user_features_with_priority(users, features):
+    res = {}
+
+    for user in users:
+        active_features = []
+        user_opted_in = set(user.get("optIn", []))
+        user_opted_out = set(user.get("optOut", []))
+
+        # Step 1: Filter valid features by location and A/B test (similar to previous part)
+        for feature in features:
+            # Check if the user is eligible for the feature based on location
+            if "locations" in feature and user["location"] not in feature["locations"]:
+                continue  # Skip if location doesn't match
+            
+            # Check if the feature is A/B tested and apply only to users with even IDs unless opted in
+            if feature.get("abTest") and user["id"] % 2 != 0 and feature["id"] not in user_opted_in:
+                continue  # Skip if it's an A/B test and the user doesn't qualify
+            
+            # Initially add all valid features
+            active_features.append(feature)
+
+        # Step 2: Resolve conflicts based on priority
+        final_features = []
+
+        # # Add all opted-in features first (they take precedence)
+        # for opt_in_feature in user_opted_in:
+        #     # Find the corresponding feature object in the features list
+        #     for feature in features:
+        #         if feature["id"] == opt_in_feature:
+        #             final_features.append(feature)
+
+        # Now add remaining non-opted-in features while respecting incompatibility and priority
+        for feature in active_features:
+            if feature["id"] in user_opted_in:
+                final_features.append(feature)  # Already added due to opt-in
+            else:
+                incompatible = set(feature.get("incompatible", []))
+                add_this_feature = True
+                for incompatible_feature in incompatible:
+                    if incompatible_feature in user_opted_in:
+                        add_this_feature = False
+                        break
+                if add_this_feature == False:
+                    continue
+                
+                conflicting_features = [f for f in final_features if f["id"] in incompatible]
+                deleted_features = []
+                add_this_feature = True
+                for conflicting_feature in conflicting_features:
+                    if conflicting_feature.get("priority", 0) < feature["priority"]:
+                        deleted_features.append(conflicting_feature)
+                    if conflicting_feature.get("priority", 0) > feature["priority"]:
+                        add_this_feature = False
+                        break
+                if add_this_feature:
+                    for deleted_feature in deleted_features:
+                        final_features.remove(deleted_feature)
+                    final_features.append(feature)
+
+        # Step 3: Remove features the user has opted out of
+        final_features = [f for f in final_features if f["id"] not in user_opted_out]
+
+        # Step 4: Add final features to result
+        res[user["name"]] = [f["id"] for f in final_features]
+    
+    return res
+
+# Test the solution
+print(get_user_features_with_priority(users, features))
+
