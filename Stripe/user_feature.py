@@ -47,28 +47,34 @@ Given the features and users, the following results are expected:
 | amanda | canada_promotion|
 '''
 
-user = { "id": 0, "name": "eva", "location": "US" }
+users = [{ "id": 0, "name": "eva", "location": "US" },
+        { "id": 1, "name": "tess", "location": "US" },
+        { "id": 2, "name": "rahool", "location": "CA" },
+        { "id": 3, "name": "amanda", "location": "CA" }]
 features = [
     { "id": "annual_sale", "locations": ["US"], "abTest": True },
     { "id": "enhanced_comments", "abTest": True },
     { "id": "canada_promotion", "locations": ["CA"] }
 ]
-def get_user_features(user, features):
-    abtest_ans, location_ans = [], []
-    for feature in features:
-        if "abTest" in feature and feature["abTest"]:
-            if user["id"] % 2 == 0:
+def get_user_features(users, features):
+    res = {}
+    for user in users:
+        abtest_ans, location_ans = [], []
+        for feature in features:
+            if "abTest" in feature and feature["abTest"]:
+                if user["id"] % 2 == 0:
+                    abtest_ans.append(feature["id"])
+            else:
                 abtest_ans.append(feature["id"])
-        else:
-            abtest_ans.append(feature["id"])
-        if "locations" in feature:
-            if user["location"] in feature["locations"]:
+            if "locations" in feature:
+                if user["location"] in feature["locations"]:
+                    location_ans.append(feature["id"])
+            else:
                 location_ans.append(feature["id"])
-        else:
-            location_ans.append(feature["id"])
-    return list(set(abtest_ans) & set(location_ans))
+        res[user["name"]] = list(set(abtest_ans) & set(location_ans))
+    return res
 
-print(get_user_features(user, features))
+print(get_user_features(users, features))
 
 '''
 ## Part 2
@@ -94,6 +100,34 @@ Given these changes and updates, the following results are now expected:
 | amanda | canada_promotion|
 '''
 
+users = [{ "id": 0, "name": "eva", "location": "US", "optIn": ["annual_sale"] },
+{ "id": 1, "name": "tess", "location": "US", "optIn": ["annual_sale"] },
+{ "id": 2, "name": "rahool", "location": "CA", "optOut": ["enhanced_comments", "canada_promotion"] },
+{ "id": 3, "name": "amanda", "location": "CA", "optIn": ["annual_sale"] }]
+features = [
+    { "id": "annual_sale", "locations": ["US"], "abTest": True },
+    { "id": "enhanced_comments", "abTest": True },
+    { "id": "canada_promotion", "locations": ["CA"] }
+]
+def get_user_features(users, features):
+    res = {}
+    for user in users:
+        abtest_ans, location_ans = [], []
+        for feature in features:
+            if "abTest" in feature and feature["abTest"]:
+                if user["id"] % 2 == 0:
+                    abtest_ans.append(feature["id"])
+            else:
+                abtest_ans.append(feature["id"])
+            if "locations" in feature:
+                if user["location"] in feature["locations"]:
+                    location_ans.append(feature["id"])
+            else:
+                location_ans.append(feature["id"])
+        res[user["name"]] = list(set(abtest_ans) & set(location_ans))
+    return res
+
+print(get_user_features(users, features))
 """
 ## Part 3
 Sometimes, Features have conflicts with each other. To prevent a broken experience for users, we need
