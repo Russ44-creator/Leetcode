@@ -80,9 +80,9 @@ def compute_penalty(log: str, closing_time: int) -> int:
             if log_string[i] == "N":
                 penalty += 1
     return penalty
-print(compute_penalty("Y Y N Y", 0))
-print(compute_penalty("N Y N Y", 2))
-print(compute_penalty("Y Y N Y", 4))
+# print(compute_penalty("Y Y N Y", 0))
+# print(compute_penalty("N Y N Y", 2))
+# print(compute_penalty("Y Y N Y", 4))
 
 """
 1b)
@@ -109,7 +109,7 @@ def find_best_closing_time(log: str) -> int:
     
     return best_time
 
-print(find_best_closing_time("Y Y N N"))
+# print(find_best_closing_time("Y Y N N"))
 """
 2a)
 We've asked our employees to write their store logs all together in the
@@ -152,33 +152,40 @@ def get_best_closing_times(aggregate_log: str) -> list:
     start = 0
 
     # Remove all newline characters to clean up the log
-    aggregate_log = aggregate_log.replace('\n', ' ')
+    aggregate_log = aggregate_log.replace('\n', '')
 
+    aggregate_logs = aggregate_log.split(" ")
+    print(aggregate_logs)
     index = 0
-    while index < len(aggregate_log):
+    while index < len(aggregate_logs):
         # Find the start and end of a valid log (BEGIN ... END)
-        if aggregate_log[index] == 'B':
+        # print(aggregate_logs[index])
+        if aggregate_logs[index] == 'BEGIN':
             start = index
-        begin_idx = aggregate_log.find("BEGIN", start)
-        end_idx = aggregate_log.find("END", begin_idx)
-
-        # If there are no more valid logs, break the loop
-        if begin_idx == -1 or end_idx == -1:
+        else:
+            index += 1
+            continue
+        if index == len(aggregate_logs) - 1:
             break
-
-        # Extract the log between BEGIN and END
-        log = aggregate_log[begin_idx + len("BEGIN"):end_idx].strip()
-
-        # Find the best closing time for this log and add it to the list
-        print(log)
-        best_closing_time = find_best_closing_time(log)
-        best_closing_times.append(best_closing_time)
-
-        # Move the starting point for the next iteration
-        start = end_idx + len("END")
+        index += 1
+        while index < len(aggregate_logs) and aggregate_logs[index] != 'END':
+            if aggregate_logs[index] == 'Y' or aggregate_logs[index] == 'N':
+                index += 1
+            elif aggregate_logs[index] == 'BEGIN':
+                break
+        if aggregate_logs[index] == 'BEGIN':
+            continue
+        elif aggregate_logs[index] == 'END':
+            log = ' '.join(aggregate_logs[start + 1:index])
+            # Extract the log between BEGIN and END
+            # Find the best closing time for this log and add it to the list
+            best_closing_time = find_best_closing_time(log)
+            best_closing_times.append(best_closing_time)
+            print(log, best_closing_time)
+            index += 1
     
     return best_closing_times
 
 
-# print(get_best_closing_times("BEGIN Y Y END \nBEGIN N N END"))  # Output: [2, 0]
+print(get_best_closing_times("BEGIN Y Y END \nBEGIN N N END"))  # Output: [2, 0]
 print(get_best_closing_times("BEGIN BEGIN \nBEGIN N N BEGIN Y Y\n END N N END"))  # Output: [2]
