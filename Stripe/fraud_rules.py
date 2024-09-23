@@ -43,7 +43,41 @@ The expected report:
 5 R1 5.60 REJECT
 10 R2 500.00 APPROVE
 '''
-def fraud_rules(transactions, fraud_rules):
-    events = []
-    fraud_dic = {}
-    report = []
+
+def print_fraud_rules(transactions, fraud_rules):
+    rules = {}
+    events = {}
+    for rule in fraud_rules:
+        time, field, value = rule.split(",")
+        rules[value] = (field, time)
+
+    for transaction in transactions:
+        time, unique_id, amount, card_number, merchant = transaction.split(",")
+        time = int(time)
+        if card_number in rules and rules[card_number][0] == "card_number":
+            if time >= int(rules[card_number][1]):
+                events[unique_id] = (time, "REJECT", amount)
+            else:
+                events[unique_id] = (time, "Approve", amount)
+        else:
+            events[unique_id] = (time, "Approve", amount)
+        
+        if merchant in rules and rules[merchant][0] == "merchant":
+            if time >= int(rules[merchant][1]):
+                events[unique_id] = (time, "REJECT", amount)
+            else:
+                events[unique_id] = (time, "Approve", amount)
+        else:
+            events[unique_id] = (time, "Approve", amount)
+    
+    events = sorted(events.items(), key=lambda x: x[1][0])
+    res = []
+    for event in events:
+        res.append(f"{event[1][0]} {event[0]} {event[1][1]} {event[1][2]}")
+    return res
+
+
+transactions = ["5,R1,5.60,4242424242424242,bobs_burgers","10,R2,500.00,4242111111111111,a_corp"]
+fraud_rules = ["1,merchant,bobs_burgers","20,card_number,4242111111111111"]
+
+print(print_fraud_rules(transactions, fraud_rules))
