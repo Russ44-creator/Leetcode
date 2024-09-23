@@ -1,6 +1,8 @@
 '''
-Stripe merchants sometimes bring payment data with them from another payment processor by sending a data file containing a list
-of card details for us to import. You will be given a string with the contents of a CSV (comma-separated value) file that has
+Stripe merchants sometimes bring payment data with them from another payment processor by sending a data 
+file containing a list
+of card details for us to import. You will be given a string with the contents of a CSV (comma-separated 
+value) file that has
 already been read, containing a list of card entries in the following format:
     customer_id,card_id,first_name,last_name,card_number,expiration
     cus_100,card_100,John,Doe,4242424242424242,1023

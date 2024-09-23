@@ -10,28 +10,14 @@ one email when the invoice comes out, one email 10 days before the invoice is du
 one email when the invoice is due, which is 30 days from when the invoice first came out. 
 This send schedule could look something like this, corresponding to the diagram below:
 
-
-     │
      │
 t=-10│[Upcoming] Invoice for Alice
      │
-     │
-     │
 t=0  │[New] Invoice for Alice
-     │
-     │
-     │
-     │
-     │
      │
 t=20 │[Reminder] Invoice for Alice
      │
-     │
-     │
 t=30 │[Due] Invoice for Alice
-     │
-     │
-     │
      │
      ▼
 
@@ -67,7 +53,40 @@ Output:
 21: [Reminder] Invoice for Bob for 100 dollars
 30: [Due] Invoice for Alice for 200 dollars
 31: [Due] Invoice for Bob for 100 dollars
+'''
+class Invoicer:
+    def __init__(self, send_schedule):
+        self.send_schedule = send_schedule
 
+    def send_emails(self, customer_invoices, customer_payments=None):
+        invoices = []
+        for invoice in customer_invoices:
+            print(invoice)
+            time, user, amount = invoice["invoice_time"], invoice["name"], invoice["amount"]
+            time_list = []
+            for send_time, _ in self.send_schedule.items():
+                time_list.append(send_time)
+            for t in time_list:
+                invoices.append((t, f"{t + time}: [{self.send_schedule[t]}] Invoice for {user} for {amount} dollars"))
+
+        invoices.sort(key=lambda x: x[0])
+        for invoice in invoices:
+            print(invoice[1])
+
+send_schedule = {
+  -10: "Upcoming",
+  0: "New",
+  20: "Reminder",
+  30: "Due"
+}
+invoicer = Invoicer(send_schedule)
+customer_invoices = [
+    {"invoice_time": 0, "name": "Alice", "amount": 200},
+    {"invoice_time": 1, "name": "Bob", "amount": 100},
+]
+invoicer.send_emails(customer_invoices)
+
+'''
 Part 2 
 Customers sometimes make a series of payments to pay their invoice.  
 In this part, you will have an unsorted list of payments made by the customers, 
@@ -180,4 +199,4 @@ customer_payments = [
 ]
 
 invoicer = Invoicer(send_schedule)
-invoicer.send_emails(customer_invoices, customer_payments)
+# invoicer.send_emails(customer_invoices, customer_payments)
