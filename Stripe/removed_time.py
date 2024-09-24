@@ -19,6 +19,9 @@ Example 3
 "1 1 1 0" remove_time = 0
 penalty = 1
 only log 4 was on when it should have been off
+'''
+
+'''
 问题二 （在问题一的基础上）
 write another function to give logs find when is the best time to take the server down
 Example
@@ -26,7 +29,9 @@ log "1 1 1 0"
 best_time = 0
 because for time 1 2 3 4 penalties will be 2 3 4 3
 at time 1 penalty is 1 which is the lowest
+'''
 
+'''
 问题三 （在问题二的基础上）
 write another function which can take in logs this time with 'BEGIN' 'END' '0' '1' '\n' they can be out of order
 There are no nested loops,
