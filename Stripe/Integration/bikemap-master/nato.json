@@ -1,0 +1,9 @@
+{
+    "foo": {
+        "bar": [
+            {"nato": "oscar"},
+            {"nato": "papa"},
+            {"nato": "quebec"}
+        ]
+    }
+}
