@@ -270,9 +270,11 @@ import x as bar
         parsed = ast.ArgumentList("3, 5, 'hi', x+5, "
                     "context.get('lala')", **exception_kwargs)
         eq_(parsed.undeclared_identifiers, set(['x', 'context']))
+        print("ssssss")
+        print(parsed.args)
         eq_([x for x in parsed.args],
             ["3", "5", "'hi'", "(x + 5)", "context.get('lala')"])
-
+        
         parsed = ast.ArgumentList("h", **exception_kwargs)
         eq_(parsed.args, ["h"])
 

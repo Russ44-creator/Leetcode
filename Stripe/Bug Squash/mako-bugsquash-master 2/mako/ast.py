@@ -62,7 +62,6 @@ class ArgumentList(object):
             expr = pyparser.parse(code, "exec", **exception_kwargs)
         else:
             expr = code
-
         f = pyparser.FindTuple(self, PythonCode, **exception_kwargs)
         f.visit(expr)
 
