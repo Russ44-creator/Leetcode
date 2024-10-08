@@ -7,12 +7,37 @@
 提前掌握一下Jackson 和 OKHTTP的library就行.
 '''
 import json
+import requests
 
 def parse_json():
-    json_data = '{"name": "Lingfeng", "age": 25, "city": "Providence"}'
+    # Path to the JSON file
+    file_path = 'ride_simple.json'
 
-    # 使用 json.loads() 将 JSON 字符串转换为字典
-    dictionary = json.loads(json_data)
+    # Open the file and parse the JSON content
+    with open(file_path, 'r') as file:
+        data = json.load(file)
 
-    # 输出字典
-    print(dictionary)
+    coordinates = data['features'][0]['geometry']['coordinates']
+    first_ten_coordinates = coordinates[:10]
+
+    # Output the first 10 coordinates
+    print(first_ten_coordinates)
+
+def send_post_request(url, json_path, output_path):
+    # 读取JSON文件
+    with open(json_path, 'r') as file:
+        json_data = file.read()
+
+    # 发送POST请求
+    response = requests.post(url, data=json_data, headers={'Content-Type': 'application/json'})
+
+    # 检查请求是否成功
+    if response.status_code == 200:
+        # 将返回的图片内容写入文件
+        with open(output_path, 'wb') as f:
+            f.write(response.content)
+        print("File saved successfully.")
+    else:
+        print("Failed to retrieve data:", response.status_code)
+
+parse_json()
